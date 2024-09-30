@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Current Track</title>
+    <script src="test.js" defer></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #track-container {
+            border: 1px solid #1db954;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(40, 40, 40, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            transition: transform 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        #track-container:hover {
+            transform: scale(1.02);
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #1db954;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        img {
+            border-radius: 8px;
+            margin-top: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer; /* Indicate that the image is clickable */
+        }
+
+        img:hover {
+            transform: scale(1.1); /* Zoom in on hover */
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #404040;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .progress {
+            height: 10px;
+            background-color: #1db954;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .no-track {
+            color: #b3b3b3;
+            font-style: italic;
+        }
+
+        /* Background Image Styling */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            cursor: pointer; /* Change cursor to indicate interactivity */
+        }
+
+        .background:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+            opacity: 0.8; /* Slightly fade background on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        .lyrics {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 1.5;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="background" id="background" onclick="playTrack()"></div>
+    <div id="track-container">
+        <h2 id="track-title">Loading track information...</h2>
+        <p id="track-artist"></p>
+        <p id="track-album"></p>
+        <img id="album-cover" src="" alt="Album Cover" onclick="playTrack()">
+        <div class="progress-bar">
+            <div class="progress" id="track-progress" style="width: 0;"></div>
+        </div>
+        <div id="lyrics" class="lyrics"></div> <!-- Add this to your HTML body -->
+
+    </div>
+
+    <script>
+        let syncedLyrics = []; // To store synced lyrics with timestamps
+        let currentLyricIndex = 0; // To track current lyric being displayed
+
+        async function fetchLyrics(track) {
+            const artistName = encodeURIComponent(track.artists[0].name);
+            const trackName = encodeURIComponent(track.name);
+            const response = await fetch(`https://lrclib.net/api/get?artist_name=${artistName}&track_name=${trackName}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.syncedLyrics) {
+                    syncedLyrics = parseLyrics(data.syncedLyrics);
+                    displayLyrics(); // Call displayLyrics here
+                } else {
+                    document.getElementById('lyrics').innerText = "No lyrics found.";
+                }
+            } else {
+                document.getElementById('lyrics').innerText = "Error fetching lyrics.";
+            }
+        }
+
+        function parseLyrics(syncedLyrics) {
+            // Split the lyrics into an array of objects with time and text
+            return syncedLyrics.split('\n').map(line => {
+                const match = line.match(/\[(\d+):(\d+\.\d+)](.*)/);
+                if (match) {
+                    const minutes = parseInt(match[1], 10);
+                    const seconds = parseFloat(match[2]);
+                    const text = match[3].trim();
+                    const time = (minutes * 60 + seconds) * 1000; // Convert to milliseconds
+                    return { time, text };
+                }
+                return null;
+            }).filter(Boolean);
+        }
+
+        /*
+        function parseSyncedLyrics(lyricString) {
+            return lyricString.split('\n').map(line => {
+                const match = line.match(/\[(\d+):(\d+\.\d+)\]\s*(.*)/);
+                if (match) {
+                    const minutes = parseInt(match[1]);
+                    const seconds = parseFloat(match[2]);
+                    const text = match[3];
+                    const timestamp = (minutes * 60 + seconds) * 1000; // Convert to milliseconds
+                    return { timestamp, text };
+                }
+                return null;
+            }).filter(Boolean);
+        }
+        */
+
+        function displayLyrics() {
+            const lyricsElement = document.getElementById('lyrics');
+            lyricsElement.innerHTML = '';
+
+            syncedLyrics.forEach(lyric => {
+                const lyricLine = document.createElement('p');
+                lyricLine.innerText = lyric.text;
+                lyricLine.dataset.timestamp = lyric.timestamp;
+                lyricsElement.appendChild(lyricLine);
+            });
+        }
+
+        function highlightLyrics(currentTime) {
+            // Find the current lyric index based on the current playback time
+            currentLyricIndex = syncedLyrics.findIndex(lyric => lyric.time > currentTime);
+
+            // Adjust currentLyricIndex to point to the last active lyric
+            if (currentLyricIndex > 0) {
+                currentLyricIndex--; // Get the last lyric that was active
+            } else {
+                currentLyricIndex = 0; // Ensure we start at the first lyric
+            }
+
+            // Highlight the current lyric while keeping other lyrics intact
+            const lyricsElement = document.getElementById('lyrics');
+            lyricsElement.innerHTML = syncedLyrics.map((lyric, index) => {
+                const isActive = index === currentLyricIndex;
+                return `<span style="color: ${isActive ? '#1db954' : '#ffffff'}">${lyric.text}</span><br>`;
+            }).join('');
+
+            // Scroll the active lyric into view
+            const activeLyricElement = lyricsElement.children[currentLyricIndex];
+            if (activeLyricElement) {
+                activeLyricElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }
+        }
+
+        function updateLyrics() {
+            if (syncedLyrics.length === 0) return;
+            const currentTime = currentProgress;
+
+            highlightLyrics(currentTime);
+            // Update the displayed lyric based on current time
+            while (currentLyricIndex < syncedLyrics.length && currentTime >= syncedLyrics[currentLyricIndex].timestamp) {
+                currentLyricIndex++;
+            }
+
+            const lyricLines = document.querySelectorAll('#lyrics p');
+            lyricLines.forEach((line, index) => {
+                line.style.opacity = (index === currentLyricIndex) ? 1 : 0.5; // Highlight current lyric
+            });
+        }
+
+
+        function onupdate() {
+            console.log(curtrack)
+            fetchLyrics(curtrack)
+        }
+        // Example function to simulate setting track information
+        function setTrackInfo(track) {
+            document.getElementById('track-title').innerText = track.name;
+            document.getElementById('track-artist').innerText = `Artist: ${track.artists.map(artist => artist.name).join(', ')}`;
+            document.getElementById('track-album').innerText = `Album: ${track.album.name}`;
+            document.getElementById('album-cover').src = track.album.images[0].url;
+            // Set initial progress
+            document.getElementById('track-progress').style.width = '0%'; // Initialize progress
+
+        }
+
+        function playTrack() {
+            // Construct the Spotify track URL
+            const trackUrl = `https://open.spotify.com/track/${currentTrack.id}`;
+            console.log('Redirecting to track:', trackUrl);
+            window.open(trackUrl, '_blank'); // Open in a new tab
+        }
+
+        // Example track data (for demonstration purposes)
+        const exampleTrack = {
+            id: 'your-track-id',
+            name: 'Example Track',
+            artists: [{ name: 'Artist 1' }, { name: 'Artist 2' }],
+            album: { name: 'Example Album', images: [{ url: 'https://via.placeholder.com/100' }] }
+        };
+
+        // Simulate setting track info on page load
+        setTrackInfo(exampleTrack);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Current Track</title>
+    <script src="test.js" defer></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #track-container {
+            border: 1px solid #1db954;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(40, 40, 40, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            transition: transform 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        #track-container:hover {
+            transform: scale(1.02);
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #1db954;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        img {
+            border-radius: 8px;
+            margin-top: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #404040;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .progress {
+            height: 10px;
+            background-color: #1db954;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .no-track {
+            color: #b3b3b3;
+            font-style: italic;
+        }
+
+        /* Background Image Styling */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            cursor: pointer; /* Change cursor to indicate interactivity */
+        }
+
+        .background:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+            opacity: 0.8; /* Slightly fade background on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background" id="background" onclick="playTrack()"></div>
+    <div id="track-container">Loading track information...</div>
+
+    <script>
+        function playTrack() {
+            // Construct the Spotify track URL
+            const trackUrl = `https://open.spotify.com/track/${currentTrack.id}`;
+            console.log('Redirecting to track:', trackUrl);
+            // Redirect to the Spotify track page
+            window.open(trackUrl, '_blank'); // Open in a new tab
+        }
+
+        // Rest of your existing JavaScript code...
+    </script>
+</body>
+
+</html>

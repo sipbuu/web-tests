@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySocial</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">MySocial</div>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search users...">
+                <button id="search-btn">Search</button>
+            </div>
+            <div class="profile-icon" id="profile-menu">
+                <img id="profile-picture" src="https://i.pravatar.cc/40" alt="Profile">
+                <div class="dropdown-content" id="dropdown">
+                    <button class="dropdown-btn" id="profile-btn">My Profile</button>
+                    <button class="dropdown-btn" id="logout-btn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="post-section">
+            <h2>Create a Post</h2>
+            <textarea id="post-content" placeholder="What's on your mind?"></textarea>
+            <button id="post-btn">Post</button>
+        </section>
+
+        <section class="feed-section">
+            <h2>Feed</h2>
+            <div id="posts-container"></div>
+        </section>
+    </main>
+
+    <aside id="profile-section" class="profile-section">
+        <h2 id="profile-username">User Profile</h2>
+        <img id="profile-pic" src="https://i.pravatar.cc/100" alt="Profile Picture">
+        <p id="profile-bio">This is the user's bio</p>
+        <button id="edit-profile-btn">Edit Profile</button>
+        <h3>Posts:</h3>
+        <div id="user-posts-container"></div>
+    </aside>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="login-btn">Login</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>Profile Settings</h2>
+            <input type="text" id="new-username" placeholder="New Username">
+            <input type="password" id="new-password" placeholder="New Password">
+            <input type="text" id="new-profile-pic" placeholder="Profile Picture URL">
+            <textarea id="new-bio" placeholder="New Bio"></textarea>
+            <button id="save-settings-btn">Save Changes</button>
+            <button id="close-settings-btn">Cancel</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

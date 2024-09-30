@@ -1,0 +1,61 @@
+html {
+    background-color: #000;
+}
+
+body {
+    background-color: #000;
+}
+
+.main-flex {
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    justify-content: center;
+}
+
+h1 {
+    color: #fff;
+}
+
+.maintext {
+    background-color: #000;
+    color: #fff;
+    font-size: 30px;
+    background: none;
+}
+
+.mainfontmodified {
+    font-family: "Inconsolata";
+    font-weight: 300;
+    font-size: 30px;
+}
+
+.jacquarda {
+    font-family: "Jacquarda Bastarda 9", system-ui;
+    font-style: normal;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.handjet {
+    font-family: "Handjet", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 30px;
+    font-style: normal;
+    font-variation-settings: "ELGR" 1, "ELSH" 2;
+}
+
+.mainfont {
+    font-family: "Inconsolata", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 30px;
+    font-style: normal;
+}
+
+.pixelfont {
+    font-family: 'Pixelify Sans';
+    font-style: normal;
+    font-size: 30px;
+}

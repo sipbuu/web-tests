@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "username": "user1",
+      "password": "password1",
+      "profilePic": "https://media.discordapp.net/attachments/1121702977846136902/1139987534626168883/what.png?ex=66f99b20&is=66f849a0&hm=0f953c69464b764904c602856f5063e35f87f2177731b465902f5cc2b8f73bb3&=&format=webp&quality=lossless",
+      "bio": "lmao wsg"
+    },
+    {
+      "username": "user2",
+      "password": "password2",
+      "profilePic": "https://i.pravatar.cc/60?img=2",
+      "bio": "This is user2's bio"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1727571079071,
+      "username": "user1",
+      "content": "test",
+      "timestamp": "2024-09-29T00:51:19.071Z"
+    },
+    {
+      "id": 1727571081658,
+      "username": "user1",
+      "content": "test",
+      "timestamp": "2024-09-29T00:51:21.658Z"
+    },
+    {
+      "id": 1727571230200,
+      "username": "user1",
+      "content": "test",
+      "timestamp": "2024-09-29T00:53:50.200Z"
+    },
+    {
+      "id": 1727571372728,
+      "username": "user1",
+      "content": "tes",
+      "timestamp": "2024-09-29T00:56:12.728Z"
+    }
+  ]
+}

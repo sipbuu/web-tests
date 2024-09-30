@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e621 </title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --light-drop-shadow: #111010;
+            --background-color: #1e1e1e;
+            --text-color: #ffffff;
+            --button-background: #66cfff;
+            --button-text-color: #fff;
+            --input-button-color: #100f0f;
+            --modal-background-color: #2e2e2e;
+            --match-color: #66cfff;
+            --match-color-button: #fff;
+            --match-color-shadow: rgba(102, 207, 255, 0.5);
+        }
+
+        body.REALLYDARK-theme {
+            --light-drop-shadow: #111010;
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --button-background: #282a2b;
+            --button-text-color: #fff;
+            --input-button-color: #141212;
+            --modal-background-color: #2e2e2e;
+            --match-color: #ffffff;
+            --match-color-button: #000000;
+            --match-color-shadow: rgba(224, 228, 230, 0.5);
+        }
+        body.light-theme {
+            --background-color: #f0f0f0;
+            --light-drop-shadow: #292727;
+            --text-color: #242222;
+            --button-background: #4e2e4f;
+            --button-text-color: #fff;
+            --modal-background-color: #fff;
+            --input-button-color: #919090;
+            --match-color: #ba55c8;
+            --match-color-shadow: #773477;
+            --match-color-button: #fff;
+        }
+        body {
+            font-family: "Public Sans", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: auto;
+            position: relative;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      color: var(--match-color);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      padding: 30px;
+      /*background-color: #121212; /* Darker card background */
+      background-color: var(--background-color);
+      color: var(--text-color);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px var(--match-color-shadow); /* Pink shadow on hover */
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      color: var(--input-button-color);
+    }
+
+    input {
+      font-family: "Public Sans", sans-serif;
+      width: 70%;
+      padding: 14px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--input-button-color); /* Input background */
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    input:focus {
+      background-color: var(--light-drop-shadow);
+      outline: none;
+      color: var(--button-text-color);
+      box-shadow: 0 0 5px var(--match-color); /* Focus effect */
+    }
+
+    input::placeholder {
+      color: var(--text-color);
+      font-family: "Public Sans", sans-serif;
+    }
+
+    input::placeholder:focus {
+        color: var(--button-text-color);
+    }
+    button {
+        font-family: "Public Sans", sans-serif;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--match-color-button);
+      background-color: var(--match-color); /* Button background */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      margin-left: 10px;
+    }
+
+    body.REALLYDARK-theme button {
+        color: #000000;
+    }
+
+    button:hover {
+      background-color: var(--match-color-shadow); /* Darker pink on hover */
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px var(--match-color-shadow); /* Button shadow */
+    }
+
+    body.REALLYDARK-theme button:hover {
+        color: #000000;
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px var(--match-color); /* Button shadow */
+    }
+    #mediaDisplay img,
+    #mediaDisplay video {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-top: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0; /* Start with invisible elements */
+        transform: scale(0.95); /* Slightly smaller at start */
+        animation: fadeIn 0.5s ease-in forwards; /* Apply fade-in animation */
+    }
+
+    #mediaDisplay img:hover,
+    #mediaDisplay video:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px var(--match-color);
+    }
+
+    .info {
+        font-family: "Public Sans", sans-serif;
+      margin-top: 20px;
+      font-size: 1rem;
+      color: var(--text-color);
+      text-align: left;
+    }
+    .warning-tag {
+    background-color: #ff0033 !important; /* Red background for warning */
+    color: white !important;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-weight: bold;
+    display: inline-block;
+    }
+    .important-info {
+        color: rgb(18, 159, 79) !important;
+        padding: 6px 12px;
+        border-radius: 8px;
+        margin-right: 10px;
+        font-weight: bold;
+        display: inline-block;
+    }
+    .blacklisted-tag {
+    background-color: #ff0000 !important; /* Yellow background */
+    color: rgba(255, 255, 255, 0.815) !important; /* Red text */
+    padding: 6px 12px;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-weight: bold;
+    cursor: default; /* Prevent clicking */
+}
+
+    .safe-tag {
+    background-color: #157c0d; /* Red background for warning */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-weight: bold;
+    display: inline-block;
+    }
+
+    .info p {
+      margin: 5px 0;
+    }
+
+    .rating {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffb74d;
+    }
+
+    .score {
+      font-size: 1rem;
+      color: #66cfff;
+      font-weight: bold;
+    }
+
+    .post-link {
+      color: #66cfff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .checkbox-container {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    margin: 10px 0;
+    cursor: pointer;
+    position: relative;
+    padding-left: 30px;
+    color: var(--text-color);
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkbox-container .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.checkbox-container:hover .checkmark {
+    background-color: #444;
+}
+
+/* Style checkmark when checked */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--match-color);
+}
+body.REALLYDARK-theme .checkbox-container input:checked ~ .checkmark {
+    background-color: var(--match-color-button);
+}
+
+
+.checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* The checkmark (tick) */
+.checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+    .post-link:hover {
+      text-decoration: underline;
+      color: var(--match-color); /* Change color on hover */
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+        display: inline-block;
+        margin: 5px;
+      background-color: #3a3a3a;
+      color: #66cfff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .tag:hover {
+      background-color: #66cfff;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      top: 0; /* Stay at the top */
+      left: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      color: var(--text-color);
+      background: rgba(0, 0, 0, 0.8); /* Black background with transparency */
+      align-items: center; /* Center modal contents vertically */
+      justify-content: center; /* Center modal contents horizontally */
+      z-index: 20; /* Sit on top */
+    }
+
+    .modal-content {
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 500px;
+      color: var(--text-color);
+      background-color: var(--modal-background-color);
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      background-color: var(--match-color);
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 5px;
+      color: var(--text-color);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      background-color: var(--match-color);
+    }
+
+    .no-media {
+      color: var(--match-color);
+      margin-top: 20px;
+      font-weight: bold;
+    }
+        #mediaDisplay {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Gap between posts */
+        }
+
+        .post {
+            width: calc(50% - 10px); /* Two posts per row */
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post img,
+        .post video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: filter 0.3s ease, transform 0.3s ease;
+            opacity: 0; /* Hide the media initially */
+            transform: scale(0.95);
+            animation: fadeIn 0.5s ease-in forwards; /* Apply fade-in animation */
+        }
+
+        .post img.blurred {
+            filter: blur(8px);
+        }
+
+        .blurred {
+            filter: blur(15px);
+            transition: filter 2s ease; /* Animation effect */
+        }
+        #blurred {
+            filter: blur(15px);
+            transition: filter 2s ease; /* Animation effect */
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+.preview-container {
+    display: flex;
+    flex-direction: column; /* Wrap posts to next line */
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px; /* Space between each post */
+}
+
+.post-preview {
+    width: 100%; /* Allow the post to take the full width */
+    max-width: 600px; /* Set a maximum width for each post */
+    text-align: center; /* Center the content within the post */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    margin: 0 auto; /* Center the post in the container */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.post-preview.visible {
+    opacity: 1;
+    visibility: visible;
+    animation: fadeInTransparency 0.8s ease forwards;
+}
+
+.post-preview img,
+.post-preview video {
+    width: 100%; /* Make the image or video take full width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Optional: Add some rounded corners */
+    max-width: 100%;
+    cursor: pointer; /* Change cursor to indicate clickability */
+}
+.loading-icon {
+    border-radius: 50%; /* Make it a circle */
+    width: 50px; /* Size of the spinner */
+    height: 50px; /* Size of the spinner */
+    text-align: center; /* Positioning */
+    align-self: center;
+    transform: -50%; /* Center the spinner */
+    z-index: 10; /* Sit on top of other elements */
+    border: 4px solid var(--light-drop-shadow); /* Light grey */
+    border-top: 4px solid var(--match-color); /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Toggle button styling */
+.dropdown-toggle {
+    background-color: #66cfff; /* Button background */
+    color: #fff;
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    outline: none;
+}
+
+.dropdown-toggle:hover {
+    background-color: #55b8e3;
+    transform: scale(1.05);
+}
+
+/* Dropdown menu (hidden by default) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #2e2e2e; /* Dark background */
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    z-index: 1;
+    padding: 10px;
+    font-family: 'Public Sans', sans-serif;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Show dropdown when hovering */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Styling for individual options */
+.dropdown-menu label {
+    display: block;
+    padding: 10px;
+    font-size: 1rem;
+    color: #b3b3b3;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-menu label:hover {
+    background-color: #444;
+    color: #fff;
+}
+
+/* Input checkbox styling */
+.dropdown-menu input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2); /* Increase size */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95); /* Initial smaller scale */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Full size when fully visible */
+    }
+}
+
+@keyframes fadeInTransparency {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Optional: Adds a slight upward motion */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes blurTransparency {
+    from {
+        filter: blur(9px)
+    }
+    to {
+        filter: blur(1px)
+    }
+}
+
+.original-link {
+    font-family: "Public Sans", sans-serif; /* Use specified font */
+    padding: 14px 24px; /* Padding to make it look like a button */
+    font-size: 1rem; /* Font size */
+    font-weight: bold; /* Bold text */
+    color: var(--match-color-button); /* White text */
+    background-color: var(--match-color); /* Button background */
+    border: none; /* No border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for background and transform */
+    margin-left: 10px; /* Space between elements */
+    text-decoration: none; /* No underline for links */
+    display: inline-block; /* Ensure proper spacing */
+}
+
+.original-link:hover {
+    background-color: var(--match-color-shadow); /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly grow on hover */
+}
+.settings-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.2s ease;
+    z-index: 1000;
+}
+
+/* Dropdown select styling */
+.theme-select {
+    background-color: #2e2e2e; /* Dark background */
+    color: #fff; /* Text color */
+    padding: 10px 15px; /* Padding inside the select */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 1rem; /* Font size */
+    font-family: 'Public Sans', sans-serif; /* Font family */
+    cursor: pointer; /* Cursor pointer */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transition for smooth effect */
+    outline: none; /* Remove default outline */
+}
+
+/* Hover effect */
+.theme-select:hover {
+    background-color: #444; /* Darker background on hover */
+    color: #66cfff; /* Change text color on hover */
+}
+
+/* Option styling */
+.theme-select option {
+    background-color: #2e2e2e; /* Dark background for options */
+    color: #fff; /* White text for options */
+}
+
+/* Optional: Focus state for accessibility */
+.theme-select:focus {
+    border: 2px solid #66cfff; /* Highlight border color on focus */
+}
+
+
+.settings-button:hover {
+    transform: scale(1.2);
+}
+
+/* Container for custom dropdown */
+.custom-dropdown {
+    position: relative; /* Position relative for absolute children */
+    width: 200px; /* Width of the dropdown */
+    margin: 0 auto; /* Center the dropdown */
+}
+
+/* Selected item styling */
+.selected {
+    background-color: var(--background-color); /* Dark background */
+    color: var(--text-color);
+    padding: 10px 15px; /* Padding */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+
+/* Options list styling */
+.dropdown-options {
+    display: none; /* Hidden by default */
+    position: absolute; /* Position absolute for dropdown */
+    background-color: var(--background-color); /* Dark background for options */
+    color: var(--text-color);
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    list-style: none; /* Remove bullet points */
+    width: 100%; /* Full width of the dropdown */
+    z-index: 100; /* On top of other elements */
+}
+
+
+/* Option item styling */
+.dropdown-options li {
+    padding: 10px 15px; /* Padding for options */
+    color: var(--text-color);
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Transition for background color */
+}
+
+/* Hover effect for options */
+.dropdown-options li:hover {
+    background-color: #444; /* Darker background on hover */
+}
+
+/* Show the options when the dropdown is active */
+.custom-dropdown.active .dropdown-options {
+    display: block; /* Show dropdown options */
+}
+
+.body.REALLYDARK-theme .custom-dropdown {
+    background-color: #000000;
+}
+
+
+.body.dark-theme .custom-dropdown {
+    background-color: #000000;
+}
+
+        /* Other existing CSS styles... */
+    </style>
+</head>
+<body>
+    <button id="openSettings" class="settings-button">⚙️</button>
+    <div class="container">
+        
+        <h1>e621</h1>
+        <div class="input-container">
+            <input type="text" id="tagInput" placeholder="Enter tags (e.g., cat, dragon)">
+            <button id="fetchBtn">fetch</button>
+            <br>
+        </div>
+        <label for="numberInput">number of posts:</label>
+        <input type="number" id="numberInput" min="1" max="100" value="10" placeholder="number here.">
+        <br>
+        <br>
+        <label for="apiKey">api key (optional):</label>
+        <input type="password" id="apiKey" placeholder="api key here (putting nothing here doesn't authenticate dw :3)">
+        <br>
+        <br>
+        <label for="username">username (api key)</label>
+        <input type="text" id="username" placeholder="username for api key">
+        <!-- Add this button to open the settings modal -->
+        <div class="loading-icon" id="loadingCircle" style="display: none;"></div>
+        <div id="mediaDisplay"></div>
+        <div id="info" class="info"></div>
+    </div>
+
+    <!-- Modal for explicit content warning -->
+    <div class="modal" id="explicitWarning">
+        <div class="modal-content">
+            <h2>⚠️ Explicit/Questionable Content Warning</h2>
+            <p>This content is rated E (Explicit) or Q (Questionable). <br> Do you agree to view it?</p>
+            <button id="agreeBtn">Agree</button>
+        </div>
+    </div>
+    <div class="modal" id="onOpenexplicitWarning" style="display: flex;">
+        <div class="modal-content">
+            <h2>⚠️ Explicit Content Warning</h2>
+            <p>This page due to it searching e621.net (duh..) may contain explicit material. <br> <br> Media will still be blurred, but some may still be visible. <br> <br> Proceed and search carefully. <br> <br> (ps: you can unblur it by hovering over it)</p>
+            <button id="closeWarningBtn">Close</button>
+        </div>
+    </div>
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h2>Preferences</h2>
+    
+            <!-- Theme selection -->
+            <div class="custom-dropdown">
+                <div class="selected" id="themeSelect">Select Theme</div>
+                <ul class="dropdown-options">
+                    <li data-value="dark">Dark Mode</li>
+                    <li data-value="light">Light Mode</li>
+                    <li data-value="reallydark">REALLY DARK Mode</li>
+                </ul>
+            </div>
+            
+    
+            <!-- Blur Explicit/Questionable content checkboxes -->
+            <label class="checkbox-container">
+                <input type="checkbox" id="blurExplicitCheckbox"> Blur Explicit Content
+                <span class="checkmark"></span>
+            </label>
+            <label class="checkbox-container">
+                <input type="checkbox" id="blurQuestionableCheckbox"> Blur Questionable Content
+                <span class="checkmark"></span>
+            </label>
+    
+            <!-- Save button -->
+            <button id="saveSettings">Save</button>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

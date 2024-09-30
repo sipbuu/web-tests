@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum with Images</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="forum-container">
+    <!-- Forum Row 1 -->
+    <div class="forum-row" onclick="openForum('Message 1', '2024-09-30', 'img1.jpg')">
+      <img class="profile-picture" src="profile1.jpg" alt="Profile Picture">
+      <div class="forum-details">
+        <h2>Topic 1</h2>
+        <p>Preview of the first message...</p>
+        <small>Posted by <strong>User1</strong> on 2024-09-30</small>
+      </div>
+    </div>
+
+    <!-- Forum Row 2 -->
+    <div class="forum-row" onclick="openForum('Message 2', '2024-09-29', 'img2.jpg')">
+      <img class="profile-picture" src="profile2.jpg" alt="Profile Picture">
+      <div class="forum-details">
+        <h2>Topic 2</h2>
+        <p>Preview of the second message...</p>
+        <small>Posted by <strong>User2</strong> on 2024-09-29</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen Modal for displaying the forum content -->
+  <div id="forumModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeForum()">&times;</span>
+      <div class="forum-header">
+        <h2 id="forumTitle">Forum Topic</h2>
+        <small id="forumDate"></small>
+      </div>
+      <div class="forum-body">
+        <img id="forumImage" src="" alt="" style="display:none;">
+        <p id="forumMessage"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

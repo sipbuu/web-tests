@@ -1,0 +1,103 @@
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1e1e1e; /* Dark background for contrast */
+    color: #f5f5f5; /* Light text color */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Header styling */
+  header {
+    background-color: #333; /* Darker header */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 2.5em;
+    color: #ffcc00; /* Bright contrast color for headings */
+  }
+  
+  /* Container for food items */
+  .food-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  /* Food item card */
+  .food-card {
+    background-color: #222; /* Card background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 15px;
+    padding: 20px;
+    width: 300px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .food-card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+  }
+  
+  /* Food image */
+  .food-card img {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  
+  /* Food title */
+  .food-title {
+    font-size: 1.5em;
+    color: #ffcc00; /* Bright contrast for titles */
+    margin: 10px 0;
+  }
+  
+  /* Description and ingredients */
+  .food-description {
+    color: #aaa; /* Slightly lighter for contrast */
+    margin: 5px 0;
+  }
+  
+  .ingredients {
+    color: #f5f5f5;
+    font-size: 0.9em;
+  }
+  
+  /* Button styles */
+  button {
+    background-color: #ffcc00; /* Bright button color */
+    color: #1e1e1e; /* Dark text for contrast */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #ff9900; /* Darker shade on hover */
+  }
+  
+  /* Footer styling */
+  footer {
+    background-color: #333; /* Darker footer */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 600px) {
+    .food-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .food-card {
+      width: 90%;
+    }
+  }
+  
